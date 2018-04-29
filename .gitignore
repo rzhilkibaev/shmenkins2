@@ -99,3 +99,13 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# pytest
+.pytest_cache/
+
+# idea
+.idea
+
+# serverless
+.serverless/
+node_modules/

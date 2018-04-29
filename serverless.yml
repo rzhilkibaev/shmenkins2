@@ -1,0 +1,26 @@
+service: shmenkins2
+
+frameworkVersion: ">=1.26.0 <2.0.0"
+
+plugins:
+  - serverless-python-requirements
+
+provider:
+  name: aws
+  profile: ${self:service}
+  region: us-west-2
+  runtime: python3.6
+  memorySize: 128
+
+package:
+  exclude:
+    - "**/*"
+  include:
+    - "src/*"
+
+functions:
+
+  HandlePushNotification:
+    handler: src/HandlePushNotification.run
+    events:
+      - http: POST push-notifications
