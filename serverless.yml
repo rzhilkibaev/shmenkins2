@@ -16,11 +16,13 @@ package:
   exclude:
     - "**/*"
   include:
-    - "src/*"
+    - "shmenkins2/*"
 
 functions:
 
   HandlePushNotification:
-    handler: src/HandlePushNotification.run
+    handler: shmenkins2/HandlePushNotification.run
     events:
       - http: POST push-notifications
+    environment:
+      - ABC: blah
