@@ -4,25 +4,23 @@ init:
 	npm install serverless-python-requirements
 
 test:
-	pipenv run pytest tests --capture=no
+	@pipenv run pytest tests --capture=no
 
 package:
-	pipenv run ./sls package
+	@./sls package
 
 deploy:
-	pipenv run ./sls deploy
+	@./sls deploy
 
-# generates config file
+# generates the config file
 config:
-	# default section
-	echo "[default]" > config.ini
+	@echo "[default]" > config.ini
 
-	# push_notification_url
-	echo -n "push_notification_url=" >> config.ini
-	./sls info | grep "POST.*https.*push-notifications" | cut -d' ' -f5 >> config.ini
+	@echo -n "push_notification_url=" >> config.ini
+	@./sls info | grep "POST.*https.*push-notifications" | cut -d' ' -f5 >> config.ini
 
 smoke-test: config
-	pipenv run pytest smoke-tests
+	@pipenv run pytest smoke-tests
 
 remove:
-	./sls remove
+	@./sls remove
