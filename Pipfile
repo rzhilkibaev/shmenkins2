@@ -13,6 +13,7 @@ pytest = "*"
 [packages]
 
 requests = "*"
+boto3 = "*"
 
 
 [requires]

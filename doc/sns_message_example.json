@@ -1,0 +1,22 @@
+{
+    "Records": [
+        {
+            "EventSource": "aws:sns",
+            "EventVersion": "1.0",
+            "EventSubscriptionArn": "arn:aws:sns:us-west-2:000000000000:shmenkins2-dev-build_requested:043e423c-415d-47c5-b5f3-2b3ba29e0350",
+            "Sns": {
+                "Type": "Notification",
+                "MessageId": "c40601f0-349a-550e-82c0-52909db63a42",
+                "TopicArn": "arn:aws:sns:us-west-2:000000000000:shmenkins2-dev-build_requested",
+                "Subject": null,
+                "Message": "{\"url\": \"https://github.com/rzhilkibaev/demo-simple-web\"}",
+                "Timestamp": "2018-04-30T05:17:32.360Z",
+                "SignatureVersion": "1",
+                "Signature": "xxx",
+                "SigningCertUrl": "https://sns.us-west-2.amazonaws.com/SimpleNotificationService-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.pem",
+                "UnsubscribeUrl": "https://sns.us-west-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-west-2:000000000000:shmenkins2-dev-build_requested:043e423c-415d-47c5-b5f3-2b3ba29e0350",
+                "MessageAttributes": {}
+            }
+        }
+    ]
+}
