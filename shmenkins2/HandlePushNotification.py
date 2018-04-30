@@ -1,7 +1,11 @@
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+
 def run(event, context):
-    print("handling push notification")
-    print("event")
-    print(str(event))
-    print("context")
-    print(str(context))
+    logger.info(f"start")
+    logger.info(f"finish")
     return {"statusCode": 201, "body": ""}
