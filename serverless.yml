@@ -13,10 +13,18 @@ provider:
   runtime: python3.6
   memorySize: 128
   iamRoleStatements:
+
     - Effect: Allow
       Action:
         - sns:Publish
       Resource: ${self:custom.build_requested_topic_arn}
+
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+        - sqs:ReceiveMessage
+        - sqs:DeleteMessage
+      Resource: ${self:custom.default_build_queue_arn}
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -24,6 +32,9 @@ custom:
   build_requested_topic: ${self:custom.prefix}-build_requested
   # arn:aws:sns:us-west-2:000000000000:shmenkins2-dev-build_requested
   build_requested_topic_arn: arn:aws:sns:${self:provider.region}:#{AWS::AccountId}:${self:custom.build_requested_topic}
+  default_build_queue: ${self:custom.prefix}-default_build_queue
+  # arn:aws:sqs:region:account_id:queue_name
+  default_build_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.default_build_queue}
 
 package:
   exclude:
@@ -44,3 +55,11 @@ functions:
     handler: shmenkins2/ScheduleBuild.run
     events:
       - sns: ${self:custom.build_requested_topic}
+
+resources:
+  Resources:
+
+    DefaultBuildQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.default_build_queue}
