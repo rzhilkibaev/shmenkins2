@@ -21,6 +21,11 @@ provider:
 
     - Effect: Allow
       Action:
+        - sns:Publish
+      Resource: ${self:custom.build_scheduled_topic_arn}
+
+    - Effect: Allow
+      Action:
         - sqs:SendMessage
         - sqs:ReceiveMessage
         - sqs:DeleteMessage
