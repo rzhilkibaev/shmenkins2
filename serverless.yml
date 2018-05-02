@@ -29,11 +29,14 @@ provider:
 custom:
   stage: ${opt:stage, self:provider.stage}
   prefix: ${self:service}-${self:custom.stage}
+
   build_requested_topic: ${self:custom.prefix}-build_requested
-  # arn:aws:sns:us-west-2:000000000000:shmenkins2-dev-build_requested
   build_requested_topic_arn: arn:aws:sns:${self:provider.region}:#{AWS::AccountId}:${self:custom.build_requested_topic}
+
+  build_scheduled_topic: ${self:custom.prefix}-build_scheduled
+  build_scheduled_topic_arn: arn:aws:sns:${self:provider.region}:#{AWS::AccountId}:${self:custom.build_scheduled_topic}
+
   default_build_queue: ${self:custom.prefix}-default_build_queue
-  # arn:aws:sqs:region:account_id:queue_name
   default_build_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.default_build_queue}
 
 package:
@@ -43,6 +46,12 @@ package:
     - "shmenkins2/*"
 
 functions:
+
+  LogSnsEvent:
+    handler: shmenkins2/LogSnsEvent.run
+    events:
+      - sns: ${self:custom.build_requested_topic}
+      - sns: ${self:custom.build_scheduled_topic}
 
   HandlePushNotification:
     handler: shmenkins2/HandlePushNotification.run
@@ -55,6 +64,8 @@ functions:
     handler: shmenkins2/ScheduleBuild.run
     events:
       - sns: ${self:custom.build_requested_topic}
+    environment:
+      BUILD_SCHEDULED_TOPIC_ARN: ${self:custom.build_scheduled_topic_arn}
 
 resources:
   Resources:
