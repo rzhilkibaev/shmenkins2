@@ -44,6 +44,9 @@ custom:
   default_build_queue: ${self:custom.prefix}-default_build_queue
   default_build_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.default_build_queue}
 
+  cb_service_role: ${self:custom.prefix}-cb_service_role
+  cb_service_role_arn: arn:aws:iam:${self:provider.region}:#{AWS::AccountId}:${self:custom.cb_service_role}
+
 package:
   exclude:
     - "**/*"
@@ -72,6 +75,13 @@ functions:
     environment:
       BUILD_SCHEDULED_TOPIC_ARN: ${self:custom.build_scheduled_topic_arn}
 
+  BuildWithAwsCb:
+    handler: shmenkins2/BuildWithAwsCb.run
+    events:
+      - sns: ${self:custom.build_scheduled_topic}
+    environment:
+      CB_SERVICE_ROLE_ARN: ${self:custom.cb_service_role_arn}
+
 resources:
   Resources:
 
@@ -79,3 +89,26 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:custom.default_build_queue}
+
+    CbServiceRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${self:custom.cb_service_role}
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: codebuild.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: AllowLogging
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource: "*"
