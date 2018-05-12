@@ -12,6 +12,9 @@ provider:
   region: us-west-2
   runtime: python3.6
   memorySize: 128
+  environment:
+    RESOURCE_PREFIX: ${self:custom.prefix}
+
   iamRoleStatements:
 
     - Effect: Allow
@@ -31,6 +34,13 @@ provider:
         - sqs:DeleteMessage
       Resource: ${self:custom.default_build_queue_arn}
 
+    - Effect: Allow
+      Action:
+        - iam:PassRole
+        - codebuild:CreateProject
+        - codebuild:UpdateProject
+      Resource: "*"
+
 custom:
   stage: ${opt:stage, self:provider.stage}
   prefix: ${self:service}-${self:custom.stage}
@@ -45,7 +55,7 @@ custom:
   default_build_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.default_build_queue}
 
   cb_service_role: ${self:custom.prefix}-cb_service_role
-  cb_service_role_arn: arn:aws:iam:${self:provider.region}:#{AWS::AccountId}:${self:custom.cb_service_role}
+  cb_service_role_arn: arn:aws:iam::#{AWS::AccountId}:role/${self:custom.cb_service_role}
 
 package:
   exclude:

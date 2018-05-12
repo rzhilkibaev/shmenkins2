@@ -12,6 +12,7 @@ logger.setLevel(logging.DEBUG)
 
 cb = boto3.client("codebuild")
 cb_service_role_arn = os.environ["CB_SERVICE_ROLE_ARN"]
+resource_prefix = os.environ["RESOURCE_PREFIX"]
 
 
 def run(event, context):
@@ -22,7 +23,8 @@ def run(event, context):
 
 
 def put_project(url):
-    project_name = hashlib.sha256(url.encode()).hexdigest()
+    url_hash = hashlib.sha256(url.encode()).hexdigest()
+    project_name = f"{resource_prefix}-{url_hash}"
     try:
         # update the cb project without checking if it exists first
         # most of the time the project is already there
