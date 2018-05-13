@@ -1,0 +1,13 @@
+name: pipline1
+
+
+# order doesn't matter, it's defined by dependencies (imports/exports)
+artifacts:
+  - artifact: my-app.img # make image
+  - artifact: my-app.local # make local service (run image locally)
+  - artifact: my-app-smoke-test.json # make test result (run tests)
+  - artifact: my-app.com # make service (deploy image)
+  - artifact: my-app-final-test.json: # make final test result (run final tests)
+      onFailure:
+        - rollback
+
