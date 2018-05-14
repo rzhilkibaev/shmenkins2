@@ -112,3 +112,6 @@ ENV/
 # serverless
 .serverless/
 node_modules/
+
+# sceptre
+variables.yaml
