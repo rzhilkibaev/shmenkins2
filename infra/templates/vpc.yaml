@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  ShmenkinsUsWest2VPC:
+    Type: "AWS::EC2::VPC"
+    Properties: 
+      CidrBlock: 10.0.0.0/24
+
+Outputs:
+  ShmenkinsUsWest2VPC:
+    Description: The ID of the Shmenkins us-west-2 VPC
+    Value: !Ref ShmenkinsUsWest2VPC
+    Export:
+      Name: !Sub "${AWS::StackName}-VPCID"
