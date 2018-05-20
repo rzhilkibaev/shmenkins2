@@ -102,7 +102,7 @@ Resources:
     Properties:
       Tags:
         - Key: Name
-          Value: shmenkins
+          Value: us-west-2 shmenkins
 
   IGWAttachment:
     Type: "AWS::EC2::VPCGatewayAttachment"
@@ -110,6 +110,40 @@ Resources:
       InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref ShmenkinsUsWest2VPC
 
+  UsWest2RouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties: 
+      VpcId: !Ref ShmenkinsUsWest2VPC
+      Tags:
+        - Key: Name
+          Value: us-west-2 shmenkins
+
+  UsWest2PublicToInternetRoute:
+    Type: "AWS::EC2::Route"
+    DependsOn: InternetGateway
+    Properties:
+      RouteTableId: !Ref UsWest2RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  UsWest2APublicSubnetRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref UsWest2APublic
+      RouteTableId: !Ref UsWest2RouteTable
+
+  UsWest2BPublicSubnetRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref UsWest2BPublic
+      RouteTableId: !Ref UsWest2RouteTable
+
+  UsWest2CPublicSubnetRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref UsWest2CPublic
+      RouteTableId: !Ref UsWest2RouteTable
+      
 Outputs:
   ShmenkinsUsWest2VPC:
     Description: The ID of the Shmenkins us-west-2 VPC
