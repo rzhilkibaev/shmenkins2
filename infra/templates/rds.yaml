@@ -8,6 +8,16 @@ Parameters:
       Default: main_db_password
 
 Resources:
+  RDSDBParameterGroup:
+    Type: AWS::RDS::DBParameterGroup
+    Properties:
+      Description: shmenkins DB parameter group
+      Family: MySQL5.7
+      #Parameters:
+      Tags:
+        - Key: Name
+          Value: shmenkins
+
   MyDB:
     Type: "AWS::RDS::DBInstance"
     Properties:
@@ -18,3 +28,4 @@ Resources:
       AllowMajorVersionUpgrade: true
       MasterUsername: master
       MasterUserPassword: !Ref MainDbMasterUserPassword
+      DBParameterGroupName: !Ref RDSDBParameterGroup
