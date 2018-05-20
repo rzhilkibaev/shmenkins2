@@ -6,6 +6,12 @@ Parameters:
     MainDbMasterUserPassword:
       Type: "AWS::SSM::Parameter::Value<String>"
       Default: main_db_password
+    UsWest2APublicSubnet:
+      Type: String
+    UsWest2BPublicSubnet:
+      Type: String
+    UsWest2CPublicSubnet:
+      Type: String
 
 Resources:
   RDSDBParameterGroup:
@@ -14,6 +20,18 @@ Resources:
       Description: shmenkins DB parameter group
       Family: MySQL5.7
       #Parameters:
+      Tags:
+        - Key: Name
+          Value: shmenkins
+
+  UsWest2APublicSubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties:
+      DBSubnetGroupDescription: Shmenkins us-west-2a public subnet group
+      SubnetIds:
+        - !Ref UsWest2APublicSubnet
+        - !Ref UsWest2BPublicSubnet
+        - !Ref UsWest2CPublicSubnet
       Tags:
         - Key: Name
           Value: shmenkins
@@ -29,3 +47,7 @@ Resources:
       MasterUsername: master
       MasterUserPassword: !Ref MainDbMasterUserPassword
       DBParameterGroupName: !Ref RDSDBParameterGroup
+      DBSubnetGroupName: !Ref UsWest2APublicSubnetGroup
+      Tags:
+        - Key: Name
+          Value: shmenkins

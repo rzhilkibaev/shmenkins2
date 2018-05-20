@@ -1,1 +1,5 @@
 template_path: templates/rds.yaml
+parameters:
+  UsWest2APublicSubnet: !stack_output vpc::UsWest2APublic
+  UsWest2BPublicSubnet: !stack_output vpc::UsWest2BPublic
+  UsWest2CPublicSubnet: !stack_output vpc::UsWest2CPublic
