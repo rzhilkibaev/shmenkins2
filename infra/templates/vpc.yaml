@@ -97,6 +97,19 @@ Resources:
         - Key: Name
           Value: us-west-2c spare
 
+  InternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: shmenkins
+
+  IGWAttachment:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties: 
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref ShmenkinsUsWest2VPC
+
 Outputs:
   ShmenkinsUsWest2VPC:
     Description: The ID of the Shmenkins us-west-2 VPC
