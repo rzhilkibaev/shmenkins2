@@ -1,3 +1,5 @@
 template_path: templates/ssm.yaml
 parameters:
     MainDbMasterUserPassword: {{ var.MainDbMasterUserPassword }}
+    DbUserShmenkinsAdminPassword: {{ var.DbUserShmenkinsAdminPassword}}
+    DbUserShmenkinsPassword: {{ var.DbUserShmenkinsPassword }}

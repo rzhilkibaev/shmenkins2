@@ -7,6 +7,14 @@ Parameters:
     Type: String
     Description: Master user password for the main database
     NoEcho: true
+  DbUserShmenkinsAdminPassword:
+    Type: String
+    Description: Admin user password for the shmenkins database
+    NoEcho: true
+  DbUserShmenkinsPassword:
+    Type: String
+    Description: App user password for the shmenkins database
+    NoEcho: true
 
 Resources:
   MainDbMasterUserPasswordParameter:
@@ -15,3 +23,15 @@ Resources:
       Name: main_db_password
       Type: String
       Value: !Ref MainDbMasterUserPassword
+  ShmenkinsAdminPasswordParameter:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: shmenkins_admin_password
+      Type: String
+      Value: !Ref DbUserShmenkinsAdminPassword
+  ShmenkinsPasswordParameter:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: shmenkins_password
+      Type: String
+      Value: !Ref DbUserShmenkinsPassword
