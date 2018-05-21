@@ -51,6 +51,7 @@ Resources:
       DBParameterGroupName: !Ref RDSDBParameterGroup
       DBSubnetGroupName: !Ref UsWest2APublicSubnetGroup
       VPCSecurityGroups: [!Ref DBSecurityGroup]
+      PubliclyAccessible: true
       Tags:
         - Key: Name
           Value: shmenkins
