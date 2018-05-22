@@ -8,7 +8,7 @@ plugins:
 
 provider:
   name: aws
-  profile: ${self:service}
+  profile: shmenkins2
   region: us-west-2
   runtime: python3.6
   memorySize: 128
@@ -91,6 +91,14 @@ functions:
       - sns: ${self:custom.build_scheduled_topic}
     environment:
       CB_SERVICE_ROLE_ARN: ${self:custom.cb_service_role_arn}
+
+  PostScmTrigger:
+    handler: shmenkins2/PostScmTrigger.run
+    events:
+      - http: POST scm-triggers
+    environment:
+      DB_USER: shmenkins
+      DB_PASSWORD: ${ssm:/shmenkins_password}
 
 resources:
   Resources:
