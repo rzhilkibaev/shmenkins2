@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4a3f4e12407d98980037f491b20bc5c5b1d19a0370730d62e88944df8f58a960"
+            "sha256": "0527df59f285b43ffb06a47afe04295f0082e903eea2bc4fe9306afe3a99dcd8"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -105,6 +105,12 @@
                 "sha256:6a81d4c9aa62caf061cb517b4d9ad1dd300374cd4706997aff9cd6aedd61fc64"
             ],
             "version": "==0.9.3"
+        },
+        "mysql-connector": {
+            "hashes": [
+                "sha256:d5b95b8de234873563855e288f0c9ef85b119c0a862287cbcee7d6654cf60467"
+            ],
+            "version": "==2.1.6"
         },
         "odfpy": {
             "hashes": [

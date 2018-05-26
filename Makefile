@@ -16,8 +16,8 @@ deploy:
 config:
 	@echo "[default]" > config.ini
 
-	@echo -n "push_notification_url=" >> config.ini
-	@./sls info | grep "POST.*https.*push-notifications" | cut -d' ' -f5 >> config.ini
+	@echo -n "api_url=" >> config.ini
+	@./sls info | grep "POST.*https.*push-notifications" | cut -d' ' -f5 | cut -d'/' -f1-4 >> config.ini
 
 smoke-test: config
 	@pipenv run pytest smoke-tests

@@ -13,8 +13,9 @@ pytest = "*"
 [packages]
 
 requests = "*"
-boto3 = "*"
+"boto3" = "*"
 records = "*"
+mysql-connector = "*"
 
 
 [requires]

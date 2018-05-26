@@ -97,8 +97,7 @@ functions:
     events:
       - http: POST scm-triggers
     environment:
-      DB_USER: shmenkins
-      DB_PASSWORD: ${ssm:/shmenkins_password}
+      DB_URL: mysql+mysqlconnector://shmenkins:${ssm:/shmenkins_password}@${ssm:/shmenkins_db_endpoint}/shmenkins
 
 resources:
   Resources:
