@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: RDS MySQL DB
+
+Resources:
+  AcceptanceTestsCBProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: Shmenkins-AT
+      Description: Shmenkins acceptance tests
+      ServiceRole: !Ref AcceptanceTestRole
+      Artifacts:
+        Type: no_artifacts
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/python:3.6.5
+      Source:
+        Location: https://github.com/shmenkins/acceptance-tests
+        Type: GITHUB
+      TimeoutInMinutes: 10
+
+  AcceptanceTestRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: shmenkins-acceptance-tests
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: AllowLogging
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - ssm:GetParameters
+                Resource: "*"
