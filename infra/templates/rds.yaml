@@ -67,6 +67,13 @@ Resources:
           ToPort: 3306
           CidrIp: 0.0.0.0/0
 
+  ShmenkinsDBEndpointParameter:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: shmenkins_db_endpoint
+      Type: String
+      Value: !GetAtt MyDB.Endpoint.Address
+
 Outputs:
   ShmenkinsDBEndpoint:
     Description: The shmenkins db endpoint url
