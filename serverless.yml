@@ -129,3 +129,18 @@ resources:
                     - logs:CreateLogStream
                     - logs:PutLogEvents
                   Resource: "*"
+
+    MainDbMasterUserPasswordParameter:
+      Type: "AWS::SSM::Parameter"
+      Properties:
+        Name: shmenkins_api_url
+        Type: String
+        Value:
+          Fn::Join:
+            - ""
+            - - "https://"
+              - Ref: ApiGatewayRestApi
+              - ".execute-api.${self:provider.region}."
+              - Ref: "AWS::URLSuffix"
+              - "/"
+              - ${self:custom.stage}
