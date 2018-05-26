@@ -66,3 +66,10 @@ Resources:
           FromPort: 3306
           ToPort: 3306
           CidrIp: 0.0.0.0/0
+
+Outputs:
+  ShmenkinsDBEndpoint:
+    Description: The shmenkins db endpoint url
+    Value: !GetAtt MyDB.Endpoint.Address
+    Export:
+      Name: "endpoint"
