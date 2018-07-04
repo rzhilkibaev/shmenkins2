@@ -3,3 +3,4 @@ parameters:
     MainDbMasterUserPassword: {{ var.MainDbMasterUserPassword }}
     DbUserShmenkinsAdminPassword: {{ var.DbUserShmenkinsAdminPassword}}
     DbUserShmenkinsPassword: {{ var.DbUserShmenkinsPassword }}
+    CodePipelineGitHubAccessToken: {{ var.CodePipelineGitHubAccessToken }}

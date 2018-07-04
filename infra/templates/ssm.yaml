@@ -15,6 +15,10 @@ Parameters:
     Type: String
     Description: App user password for the shmenkins database
     NoEcho: true
+  CodePipelineGitHubAccessToken:
+    Type: String
+    Description: Personal access token used to access GitHub API
+    NoEcho: true
 
 Resources:
   MainDbMasterUserPasswordParameter:
@@ -35,3 +39,9 @@ Resources:
       Name: shmenkins_password
       Type: String
       Value: !Ref DbUserShmenkinsPassword
+  CodePipelineGitHubAccessTokenParameter:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: code_pipeline_github_access_token
+      Type: String
+      Value: !Ref CodePipelineGitHubAccessToken
