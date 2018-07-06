@@ -2,13 +2,59 @@ AWSTemplateFormatVersion: 2010-09-09
 
 Description: RDS MySQL DB
 
+Parameters:
+    CodePipelineGitHubAccessToken:
+      Type: "AWS::SSM::Parameter::Value<String>"
+      Default: code_pipeline_github_access_token
+
 Resources:
+  AcceptanceTestsPipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      RoleArn: !GetAtt AcceptanceTestsPipelineRole.Arn
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              Configuration:
+                Owner: shmenkins
+                Repo: acceptance-tests
+                Branch: master
+                OAuthToken: !Ref CodePipelineGitHubAccessToken
+              OutputArtifacts:
+                - Name: Source
+
+                  #Source stage is working now
+                  #fix Build stage, it can't download source
+
+        - Name: Build
+          Actions:
+            - Name: Build
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              Configuration:
+                ProjectName: !Ref AcceptanceTestsCBProject
+              InputArtifacts:
+                - Name: Source
+              RunOrder: 1
+      ArtifactStore:
+        Type: S3
+        Location: !Ref AcceptanceTestPipelineArtifactBucket
+
   AcceptanceTestsCBProject:
     Type: AWS::CodeBuild::Project
     Properties:
       Name: Shmenkins-AT
       Description: Shmenkins acceptance tests
-      ServiceRole: !Ref AcceptanceTestRole
+      ServiceRole: !Ref AcceptanceTestsCodeBuildRole
       Artifacts:
         Type: no_artifacts
       Environment:
@@ -20,10 +66,42 @@ Resources:
         Type: GITHUB
       TimeoutInMinutes: 10
 
-  AcceptanceTestRole:
+  AcceptanceTestPipelineArtifactBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+
+  AcceptanceTestsPipelineRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: shmenkins-acceptance-tests
+      RoleName: shmenkins-acceptance-tests-pipeline
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: AllowLogging
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:PutObjectAcl
+                  - s3:PutObjectTagging
+                Resource: !Join ["", [!GetAtt AcceptanceTestPipelineArtifactBucket.Arn, "/*"]]
+              - Effect: Allow
+                Action:
+                  - codebuild:StartBuild
+                  - codebuild:BatchGetBuilds
+                Resource: "*"
+
+  AcceptanceTestsCodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: shmenkins-acceptance-tests-codebuild
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -42,4 +120,8 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                   - ssm:GetParameters
+                  - s3:GetObject
                 Resource: "*"
+                #TODO: move s3 into a separate statement with bucket name in Resource
+                #TODO: Use specific log name in resource
+                #TODO: Use specific ssm name in resource
