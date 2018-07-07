@@ -6,6 +6,9 @@ Parameters:
     CodePipelineGitHubAccessToken:
       Type: "AWS::SSM::Parameter::Value<String>"
       Default: code_pipeline_github_access_token
+    CodeBuildProjectName:
+      Type: String
+      Default: Shmenkins-AT
 
 Resources:
   AcceptanceTestsPipeline:
@@ -48,7 +51,7 @@ Resources:
   AcceptanceTestsCBProject:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: Shmenkins-AT
+      Name: !Ref CodeBuildProjectName
       Description: Shmenkins acceptance tests
       ServiceRole: !Ref AcceptanceTestsCodeBuildRole
       Artifacts:
@@ -111,12 +114,18 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
+                  - ssm:GetParameters
+                Resource: "*"
+              - Effect: Allow
+                Action:
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
                   - logs:PutLogEvents
-                  - ssm:GetParameters
+                Resource: [
+                  !Join ["", ["arn:aws:logs:", "Ref": "AWS::Region", ":", "Ref": "AWS::AccountId", ":log-group:/aws/codebuild/", "Ref": CodeBuildProjectName ]],
+                  !Join ["", ["arn:aws:logs:", "Ref": "AWS::Region", ":", "Ref": "AWS::AccountId", ":log-group:/aws/codebuild/", "Ref": CodeBuildProjectName, ":*" ]]
+                  ]
+              - Effect: Allow
+                Action:
                   - s3:GetObject
-                Resource: "*"
-                #TODO: move s3 into a separate statement with bucket name in Resource
-                #TODO: Use specific log name in resource
-                #TODO: Use specific ssm name in resource
+                Resource: !Join ["", [!GetAtt AcceptanceTestPipelineArtifactBucket.Arn, "/*"]]
