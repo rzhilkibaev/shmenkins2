@@ -28,10 +28,6 @@ Resources:
                 OAuthToken: !Ref CodePipelineGitHubAccessToken
               OutputArtifacts:
                 - Name: Source
-
-                  #Source stage is working now
-                  #fix Build stage, it can't download source
-
         - Name: Build
           Actions:
             - Name: Build
@@ -56,14 +52,13 @@ Resources:
       Description: Shmenkins acceptance tests
       ServiceRole: !Ref AcceptanceTestsCodeBuildRole
       Artifacts:
-        Type: no_artifacts
+        Type: CODEPIPELINE
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/python:3.6.5
       Source:
-        Location: https://github.com/shmenkins/acceptance-tests
-        Type: GITHUB
+        Type: CODEPIPELINE
       TimeoutInMinutes: 10
 
   AcceptanceTestPipelineArtifactBucket:
