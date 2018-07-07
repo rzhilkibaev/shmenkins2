@@ -33,5 +33,5 @@ def run(event, context):
         logger.error(e)
         return {"statusCode": 500, "body": "Internal server error"}
 
-    logger.info(f"finish")
+    logger.info(f"finish; id={body['id']}")
     return {"statusCode": 201, "body": response_body}
