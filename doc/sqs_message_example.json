@@ -1,0 +1,20 @@
+{
+    "Records": [
+        {
+            "messageId": "50ece427-4c82-4799-8103-cb16938893e6",
+            "receiptHandle": "AQEB1QRcfItMwSdYQOI7OHdtBD4v/g4riyz9ZlJpRBCZuIOHLWnwqLJ66NtDPZ9+MWNnHp4F4D7kDaohpqQJsDtY0IesBxSdPge1iOQKqzfmMU42vwjsmYDKB8RhY0nuNk8+giNGISmpdu8l+i6l15byTQraGpP4ymyUoSO6P7EnKAr8eiwaCQLGvEEm+0S4FRHoLwCIvB0QQvNGSRqPWu4CAidWD/kaWQu6c1uzEeprSyQvwn2zrypRiav00IBSh55GICujaN5R1G8D+wY0z367U+pc/RrJRHs4V+moIECjARoyOUknxnsXR2/uHGiAjVF7sMRiA0OXq5H1HldUjVbfWz8imbfzyowdaRurNtnJuOCXXsO42ftIkhxDniFYWJobs9gPAdHykmce22pIKHu2y6KG+oO1pVe9FGo8kqI66Y4=",
+            "body": "{\"url\": \"https://github.com/bob/demo-simple-web\"}",
+            "attributes": {
+                "ApproximateReceiveCount": "1",
+                "SentTimestamp": "1531013273409",
+                "SenderId": "AROAJ6W63ZSHUUUUZH5KE:shmenkins2-dev-HandlePushNotification",
+                "ApproximateFirstReceiveTimestamp": "1531013273442"
+            },
+            "messageAttributes": {},
+            "md5OfBody": "e05e5de66e1180ca3935fc7b7e811112",
+            "eventSource": "aws:sqs",
+            "eventSourceARN": "arn:aws:sqs:us-west-2:000000000000:shmenkins2-dev-artifact_updated_queue",
+            "awsRegion": "us-west-2"
+        }
+    ]
+}
