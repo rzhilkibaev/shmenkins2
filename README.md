@@ -15,3 +15,11 @@ When an ag changes it makes all it's downstream dependencies outdated.
 
 Each ag has one (?) build script that defines how the ag is built.
 It lists all dependencies and artifacts (imports and exports).
+
+# High level overview
+
+Sequence of events:
+ 0. a notification received from scm and an `artifact-updated` event sent to sqs
+ 0. the `artifact-updated` event is received and a build is scheduled (a `build-scheduled` event is sent to sqs)
+ 0. the `build-scheduled` event is received, a build is executed, an artifact group is persisted and a `artifact-updated` event is sent
+ 0. repeat
