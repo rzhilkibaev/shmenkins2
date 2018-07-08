@@ -19,6 +19,13 @@ provider:
 
     - Effect: Allow
       Action:
+        - sqs:SendMessage
+        - sqs:ReceiveMessage
+        - sqs:DeleteMessage
+      Resource: ${self:custom.artifact_updated_queue_arn}
+
+    - Effect: Allow
+      Action:
         - sns:Publish
       Resource: ${self:custom.build_requested_topic_arn}
 
@@ -53,6 +60,7 @@ custom:
 
   artifact_updated_queue: ${self:custom.prefix}-artifact_updated_queue
   artifact_updated_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.artifact_updated_queue}
+  artifact_updated_queue_url: https://sqs.${self:provider.region}.amazonaws.com/#{AWS::AccountId}/${self:custom.artifact_updated_queue}
 
   default_build_queue: ${self:custom.prefix}-default_build_queue
   default_build_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.default_build_queue}
@@ -79,7 +87,7 @@ functions:
     events:
       - http: POST push-notifications
     environment:
-      BUILD_REQUESTED_TOPIC_ARN: ${self:custom.build_requested_topic_arn}
+      ARTIFACT_UPDATED_QUEUE_URL: ${self:custom.artifact_updated_queue_url}
 
   OutdateDownstreamArtifacts:
     handler: shmenkins2/OutdateDownstreamArtifacts.run
