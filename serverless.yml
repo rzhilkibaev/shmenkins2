@@ -87,6 +87,7 @@ functions:
     events:
       - http: POST push-notifications
     environment:
+      DB_URL: mysql+mysqlconnector://shmenkins:${ssm:/shmenkins_password}@${ssm:/shmenkins_db_endpoint}/shmenkins
       ARTIFACT_UPDATED_QUEUE_URL: ${self:custom.artifact_updated_queue_url}
 
   OutdateDownstreamArtifacts:
