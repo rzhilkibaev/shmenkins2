@@ -51,6 +51,9 @@ custom:
   build_scheduled_topic: ${self:custom.prefix}-build_scheduled
   build_scheduled_topic_arn: arn:aws:sns:${self:provider.region}:#{AWS::AccountId}:${self:custom.build_scheduled_topic}
 
+  artifact_updated_queue: ${self:custom.prefix}-artifact_updated_queue
+  artifact_updated_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.artifact_updated_queue}
+
   default_build_queue: ${self:custom.prefix}-default_build_queue
   default_build_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.default_build_queue}
 
@@ -78,6 +81,12 @@ functions:
     environment:
       BUILD_REQUESTED_TOPIC_ARN: ${self:custom.build_requested_topic_arn}
 
+  OutdateDownstreamArtifacts:
+    handler: shmenkins2/OutdateDownstreamArtifacts.run
+    events:
+      - sqs:
+          arn: ${self:custom.artifact_updated_queue_arn}
+
   ScheduleBuild:
     handler: shmenkins2/ScheduleBuild.run
     events:
@@ -101,6 +110,11 @@ functions:
 
 resources:
   Resources:
+
+    ArtifactUpdatedQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.artifact_updated_queue}
 
     DefaultBuildQueue:
       Type: AWS::SQS::Queue
