@@ -19,7 +19,10 @@ It lists all dependencies and artifacts (imports and exports).
 # High level overview
 
 Sequence of events:
- 0. a notification received from scm and an `artifact-updated` event sent to sqs
- 0. the `artifact-updated` event is received and a build is scheduled (a `build-scheduled` event is sent to sqs)
- 0. the `build-scheduled` event is received, a build is executed, an artifact group is persisted and a `artifact-updated` event is sent
- 0. repeat
+ 0. HandlePushNotification (UpdateSrc) lambda. A notification received from scm and an `artifact-updated` event is sent to `artifact-updated-q` queue.
+ 0. OutdateDownstreamArtifacts lambda. The `artifact-updated` event is received, a list of downstream dependencies is made and for each an `artifact-outdated` event is sent to `artifact-outdated-q` queue.
+ 0. ScheduleArtifactUpdate lambda. The `artifact-outdated` event is received and a build is scheduled (a `build-scheduled` event is sent to sqs).
+ 0. StartArtifactUpdate lambda. The `build-scheduled` event is received, a build is started and `build-started` event is sent to sqs/sns.
+ 0. CodeBuild project. The build is executed and a `build-finished` event is sent to sns.
+ 0. UpdateArtifact lambda. The `build-finished` event is received and an `artifact-updated` event is sent to `artifact-updated-q` queue.
+ 0. repeat.
