@@ -21,8 +21,9 @@ def run(event, context):
 
     logger.info(f"url={url}")
     try:
-        rows = db.query("select id from scm_trigger where url=:url", url=url)
-        logger.info(f"found {len(rows.all())} src artifacts")
+        rows = db.query("select id from scm_repo where url=:url", url=url)
+        repo_count = len(rows.all())  # this also fetches all rows, without it none of the rows are fetched.
+        logger.info(f"found {repo_count} scm repos")
     except Exception as e:
         logger.error(e)
         return {"statusCode": 500, "body": "Internal server error"}

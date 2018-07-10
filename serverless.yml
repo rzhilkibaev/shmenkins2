@@ -110,10 +110,10 @@ functions:
     environment:
       CB_SERVICE_ROLE_ARN: ${self:custom.cb_service_role_arn}
 
-  PostScmTrigger:
-    handler: shmenkins2/PostScmTrigger.run
+  PostScmRepo:
+    handler: shmenkins2/PostScmRepo.run
     events:
-      - http: POST scm-triggers
+      - http: POST scm-repos
     environment:
       DB_URL: mysql+mysqlconnector://shmenkins:${ssm:/shmenkins_password}@${ssm:/shmenkins_db_endpoint}/shmenkins
 

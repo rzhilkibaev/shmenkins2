@@ -26,7 +26,7 @@ def run(event, context):
 
     try:
         with db.transaction():
-            cursor = db.db.execute(text("insert into scm_trigger(url) values(:url)"), url=url)
+            cursor = db.db.execute(text("insert into scm_repo(url) values(:url)"), url=url)
             body["id"] = cursor.lastrowid
         response_body = json.dumps(body)
     except Exception as e:
