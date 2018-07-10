@@ -12,17 +12,6 @@ def test_push_notification_accepted():
     assert response.status_code == 201
 
 
-def test_post_scm_trigger():
-    response = requests.post(f"{_api_url}/scm-triggers", json={"url": "abc"})
-
-    assert response.status_code == 201
-
-    body = response.json()
-
-    assert body["url"] == "abc"
-    assert body["id"] > 0
-
-
 def get_push_notification_request_body():
     return json.dumps({
         "ref": "refs/heads/master",
