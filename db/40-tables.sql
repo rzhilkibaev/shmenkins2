@@ -3,20 +3,18 @@ create table if not exists shmenkins.artifact_group (
     name varchar(100) not null unique
 );
 
-create table if not exists shmenkins.scm_trigger (
+create table if not exists shmenkins.scm_repo (
     id integer unsigned auto_increment primary key,
     url varchar(1000) character set utf8 not null,
     index (url)
 );
 
-create table if not exists shmenkins.artifact_group__scm_trigger (
+create table if not exists shmenkins.scm_repo__artifact_group (
+    scm_repo_id integer unsigned not null,
     artifact_group_id integer unsigned not null,
-    scm_trigger_id integer unsigned not null,
-    primary key (artifact_group_id, scm_trigger_id),
+    primary key (scm_repo_id, artifact_group_id),
+    index (scm_repo_id),
     index (artifact_group_id),
-    index (scm_trigger_id),
-    foreign key (artifact_group_id) references shmenkins.artifact_group(id),
-    foreign key (scm_trigger_id) references shmenkins.scm_trigger(id)
+    foreign key (scm_repo_id) references shmenkins.scm_repo(id),
+    foreign key (artifact_group_id) references shmenkins.artifact_group(id)
 );
-
-drop table if exists shmenkins.artifact_group__scm_trigger;
