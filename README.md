@@ -10,6 +10,11 @@ python 3.6, pipenv, npm
 # Notes
 Everything is an artifact group (ag): jar(s), test report, running service, VPN...
 Every artifact has a dependency. There are multiple types of dependencies: source code, ag, approval...
+Dependencies are also artifact groups. For example a source code repo is an artifact group.
+Modeling a source code repo as a separate artifact group allows us to have an object for each source code repo.
+We can attach additional info to that object and track it separately. Just like it is a separate object in real life.
+If we use source code repo url just as a property of a jar artifact then we loose the ability to track
+a source code repo as a separate object.
 
 When an ag changes it makes all it's downstream dependencies outdated.
 
