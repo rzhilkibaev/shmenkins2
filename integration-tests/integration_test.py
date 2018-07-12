@@ -1,6 +1,6 @@
-import os
 import configparser
 import json
+import os
 
 cfg = configparser.ConfigParser()
 
@@ -9,9 +9,20 @@ cfg.read(f"{this_file_dir}/config.ini")
 
 os.environ["DB_URL"] = str(cfg["default"]["shmenkins_db_url"])
 os.environ["ARTIFACT_UPDATED_QUEUE_URL"] = str(cfg["default"]["artifact_updated_queue_url"])
+os.environ["ARTIFACT_OUTDATED_QUEUE_URL"] = str(cfg["default"]["artifact_outdated_queue_url"])
 
 from shmenkins2 import HandlePushNotification
 from shmenkins2 import PostScmRepo
+from shmenkins2 import OutdateDownstreamArtifactsForScmRepo
+
+
+def test_outdate_downstream_aftifacts_for_scm_repo():
+    event = {"Records": [
+        {"body": json.dumps({"id": "4"})}
+    ]}
+    ctx = None
+    # just run to see if it finishes without failing
+    OutdateDownstreamArtifactsForScmRepo.run(event, ctx)
 
 
 def test_post_scm_repo():

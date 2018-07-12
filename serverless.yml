@@ -62,6 +62,10 @@ custom:
   artifact_updated_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.artifact_updated_queue}
   artifact_updated_queue_url: https://sqs.${self:provider.region}.amazonaws.com/#{AWS::AccountId}/${self:custom.artifact_updated_queue}
 
+  artifact_outdated_queue: ${self:custom.prefix}-artifact_outdated_queue
+  artifact_outdated_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.artifact_outdated_queue}
+  artifact_outdated_queue_url: https://sqs.${self:provider.region}.amazonaws.com/#{AWS::AccountId}/${self:custom.artifact_outdated_queue}
+
   default_build_queue: ${self:custom.prefix}-default_build_queue
   default_build_queue_arn: arn:aws:sqs:${self:provider.region}:#{AWS::AccountId}:${self:custom.default_build_queue}
 
@@ -90,11 +94,14 @@ functions:
       DB_URL: mysql+mysqlconnector://shmenkins:${ssm:/shmenkins_password}@${ssm:/shmenkins_db_endpoint}/shmenkins
       ARTIFACT_UPDATED_QUEUE_URL: ${self:custom.artifact_updated_queue_url}
 
-  OutdateDownstreamArtifacts:
-    handler: src/shmenkins2/OutdateDownstreamArtifacts.run
+  OutdateDownstreamArtifactsForScmRepo:
+    handler: src/shmenkins2/OutdateDownstreamArtifactsForScmRepo.run
     events:
       - sqs:
           arn: ${self:custom.artifact_updated_queue_arn}
+    environment:
+      DB_URL: mysql+mysqlconnector://shmenkins:${ssm:/shmenkins_password}@${ssm:/shmenkins_db_endpoint}/shmenkins
+      ARTIFACT_OUTDATED_QUEUE_URL: ${self:custom.artifact_outdated_queue_url}
 
   ScheduleBuild:
     handler: src/shmenkins2/ScheduleBuild.run
@@ -124,6 +131,11 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:custom.artifact_updated_queue}
+
+    ArtifactOutdatedQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.artifact_outdated_queue}
 
     DefaultBuildQueue:
       Type: AWS::SQS::Queue
