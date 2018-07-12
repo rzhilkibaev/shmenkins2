@@ -3,8 +3,8 @@ init:
 	npm install serverless
 	npm install serverless-python-requirements
 
-test:
-	@pipenv run pytest tests --capture=no
+integration-test:
+	@PYTHONPATH=src pipenv run pytest integration-tests
 
 package:
 	@./sls package

@@ -1,9 +1,11 @@
+import os
 import configparser
 import json
-import os
 
 cfg = configparser.ConfigParser()
-cfg.read("config.ini")
+
+this_file_dir = os.path.dirname(os.path.abspath(__file__))
+cfg.read(f"{this_file_dir}/config.ini")
 
 os.environ["DB_URL"] = str(cfg["default"]["shmenkins_db_url"])
 os.environ["ARTIFACT_UPDATED_QUEUE_URL"] = str(cfg["default"]["artifact_updated_queue_url"])

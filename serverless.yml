@@ -72,18 +72,18 @@ package:
   exclude:
     - "**/*"
   include:
-    - "shmenkins2/*"
+    - "src/**"
 
 functions:
 
   LogSnsEvent:
-    handler: shmenkins2/LogSnsEvent.run
+    handler: src/shmenkins2/LogSnsEvent.run
     events:
       - sns: ${self:custom.build_requested_topic}
       - sns: ${self:custom.build_scheduled_topic}
 
   HandlePushNotification:
-    handler: shmenkins2/HandlePushNotification.run
+    handler: src/shmenkins2/HandlePushNotification.run
     events:
       - http: POST push-notifications
     environment:
@@ -91,27 +91,27 @@ functions:
       ARTIFACT_UPDATED_QUEUE_URL: ${self:custom.artifact_updated_queue_url}
 
   OutdateDownstreamArtifacts:
-    handler: shmenkins2/OutdateDownstreamArtifacts.run
+    handler: src/shmenkins2/OutdateDownstreamArtifacts.run
     events:
       - sqs:
           arn: ${self:custom.artifact_updated_queue_arn}
 
   ScheduleBuild:
-    handler: shmenkins2/ScheduleBuild.run
+    handler: src/shmenkins2/ScheduleBuild.run
     events:
       - sns: ${self:custom.build_requested_topic}
     environment:
       BUILD_SCHEDULED_TOPIC_ARN: ${self:custom.build_scheduled_topic_arn}
 
   BuildWithAwsCb:
-    handler: shmenkins2/BuildWithAwsCb.run
+    handler: src/shmenkins2/BuildWithAwsCb.run
     events:
       - sns: ${self:custom.build_scheduled_topic}
     environment:
       CB_SERVICE_ROLE_ARN: ${self:custom.cb_service_role_arn}
 
   PostScmRepo:
-    handler: shmenkins2/PostScmRepo.run
+    handler: src/shmenkins2/PostScmRepo.run
     events:
       - http: POST scm-repos
     environment:
